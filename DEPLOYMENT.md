@@ -85,10 +85,28 @@ By default, the backend allows requests from `*` and `https://*.vercel.app`. If 
 
 ---
 
-## ✅ Step 4: Verification Checklist
+## ⏱️ Step 5: Keep Render Backend Alive 24/7 (UptimeRobot)
+
+Render's free tier spins down web services after 15 minutes of inactivity, causing cold-start delays. Set up UptimeRobot to ping the backend every 5 minutes:
+
+### Setting Up UptimeRobot (Free)
+1. Create a free account at **[uptimerobot.com](https://uptimerobot.com)**.
+2. Click **Add New Monitor**.
+3. Configure the monitor:
+   - **Monitor Type**: `HTTP(s)`
+   - **Friendly Name**: `LearnWise Backend`
+   - **URL (or IP)**: `https://your-backend-name.onrender.com/ping` (or `/healthz`)
+   - **Monitoring Interval**: `5 minutes`
+4. Click **Create Monitor**.
+5. UptimeRobot will now ping your Render backend every 5 minutes, keeping it **warm and instant 24/7 with zero cold starts**.
+
+---
+
+## ✅ Step 6: Verification Checklist
 
 - [ ] Visit `https://your-backend-url.onrender.com/api/v1/health` &rarr; `{"status":"ok", "database":"ready"}`
 - [ ] Visit `https://your-frontend-url.vercel.app` &rarr; Landing Page loads cleanly.
 - [ ] Click **"Start Learning Now"** or ask a query in the Chat Workspace &rarr; Grounded answer with `[S1]` citations appears.
 - [ ] Test **Light / Dark Mode Toggle** in navbar.
 - [ ] Test **User Profile Switcher** & verify isolated chat histories.
+- [ ] UptimeRobot monitor shows **Status: UP (100%)**.

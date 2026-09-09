@@ -133,6 +133,8 @@ def create_app() -> FastAPI:
 
     @app.get("/")
     @app.head("/")
+    @app.get("/ping")
+    @app.get("/healthz")
     def root_health():
         return {
             "status": "ok",
