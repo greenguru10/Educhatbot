@@ -6,7 +6,7 @@
 ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
 ![React](https://img.shields.io/badge/React%2019-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-![Groq](https://img.shields.io/badge/Groq-120B%20Accelerated-f97316?style=for-the-badge)
+![LLM](https://img.shields.io/badge/120B%20LLM-Accelerated-f97316?style=for-the-badge)
 ![NeonDB](https://img.shields.io/badge/NeonDB-PostgreSQL-00E599?style=for-the-badge&logo=postgresql&logoColor=white)
 
 **A high-precision, production-grade educational RAG assistant engineered to deliver conversational explanations with verified academic citations, zero hallucinations, syntax-highlighted code execution, and per-user workspace isolation.**
@@ -19,7 +19,7 @@
 
 ## 🌟 Key Features
 
-- ⚡ **Groq 120B Acceleration with Multi-Key Failover**: Near-instantaneous response times powered by `openai/gpt-oss-120b` with seamless automatic rotation across multiple fallback API keys upon rate-limits or quota depletion.
+- ⚡ **120B Neural LLM Acceleration with Multi-Key Failover**: Near-instantaneous response times powered by `openai/gpt-oss-120b` with seamless automatic rotation across multiple fallback API keys upon rate-limits or quota depletion.
 - 🔍 **Strict Citation Grounding (`[S1]`, `[S2]`)**: Every factual claim is backed by verified university-standard course materials with clickable citation badges that slide open full document excerpts.
 - 🎨 **ChatGPT-Style Minimalist Interface**: Clean, distraction-free conversational stream with multiline composer (`Shift + Enter`), copyable syntax-highlighted code blocks, and audio read-aloud text-to-speech.
 - 🚀 **High-Converting Landing Page**: Featuring an interactive code terminal preview, animated features grid, curriculum topic showcases, and one-click app launch.
@@ -47,7 +47,7 @@
                    ▼                                                          ▼
     ┌─────────────────────────────┐                            ┌─────────────────────────────┐
     │     Hybrid Retrieval        │                            │      Generation Gateway     │
-    │  • Lexical BM25 (Boosted)   │                            │  • Groq (openai/gpt-oss-120b)│
+    │  • Lexical BM25 (Boosted)   │                            │  • 120B Neural Brain Engine │
     │  • Dense Vector Cosine Sim  │                            │  • Multi-Key Failover Pool  │
     │  • Reciprocal Rank Fusion   │                            │  • Grounding Validator      │
     └──────────────┬──────────────┘                            └──────────────┬──────────────┘
@@ -109,7 +109,7 @@
 ### Prerequisites
 - **Python 3.10+** (Python 3.11 recommended)
 - **Node.js 18+** and `npm`
-- **Groq API Key** ([console.groq.com](https://console.groq.com))
+- **LLM API Key** (OpenAI-compatible / 120B model endpoint)
 
 ---
 
@@ -136,9 +136,9 @@ cp ../.env.example ../.env
 Edit `.env` at root with your keys:
 ```env
 LLM_PROVIDER=openai_compatible
-LLM_API_KEY=gsk_your_primary_groq_key
-LLM_FALLBACK_API_KEYS=gsk_fallback_key_1,gsk_fallback_key_2
-LLM_BASE_URL=https://api.groq.com/openai/v1
+LLM_API_KEY=your_primary_api_key
+LLM_FALLBACK_API_KEYS=your_fallback_key_1,your_fallback_key_2
+LLM_BASE_URL=https://your-llm-provider.com/v1
 LLM_MODEL=openai/gpt-oss-120b
 DATABASE_URL=postgresql://user:pass@host/neondb?sslmode=require
 ```

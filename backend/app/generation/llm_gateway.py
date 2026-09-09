@@ -347,10 +347,10 @@ class OpenAICompatibleClient:
                     if isinstance(parsed, dict) and "answer" in parsed:
                         return parsed
             except Exception as e:
-                logger.warning(f"Groq API key {idx+1}/{len(self.api_keys)} ({key[:10]}...) failed: {e}. Trying next available fallback key.")
+                logger.warning(f"LLM API key {idx+1}/{len(self.api_keys)} ({key[:10]}...) failed: {e}. Trying next available fallback key.")
 
         # Fallback to smart local academic brain if all live API keys fail
-        logger.warning("All live Groq LLM API keys exhausted or failed. Using Intelligent Academic Brain.")
+        logger.warning("All live LLM API keys exhausted or failed. Using Intelligent Academic Brain.")
         q_match = re.search(r"User question:\s*\n*(.*?)(?=\n\n|\nLearner|\nApproved|\Z)", user_prompt, re.DOTALL)
         question = q_match.group(1).strip() if q_match else "Academic Topic"
         markers = re.findall(r"\[S(\d+)\]\s*Title:\s*(.*?)\n.*?Text:\s*\n*(.*?)(?=\n\[S\d+\]|\nWrite|\Z)", user_prompt, re.DOTALL)

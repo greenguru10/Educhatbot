@@ -88,7 +88,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartChat, theme, on
       <section className="relative pt-20 pb-16 md:pt-28 md:pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-6 animate-fade-in">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Powered by Groq 120B & Hybrid RAG</span>
+          <span>Powered by 120B LLM & Hybrid Neural RAG</span>
         </div>
 
         <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.1] max-w-4xl mx-auto">
@@ -144,7 +144,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartChat, theme, on
             </div>
             <div className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-mono font-medium">
               <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
-              <span>Groq 120B Connected</span>
+              <span>120B Neural Brain Connected</span>
             </div>
           </div>
 
@@ -225,7 +225,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartChat, theme, on
               <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-600 dark:text-cyan-400 mb-4 group-hover:scale-110 transition-transform">
                 <Zap className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Groq 120B Speed</h3>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Ultra-Fast 120B Inference</h3>
               <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                 Near-instantaneous token generation with built-in multi-key automated failover ensuring zero interruption during study sessions.
               </p>

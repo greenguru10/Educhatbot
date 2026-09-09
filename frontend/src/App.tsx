@@ -535,7 +535,7 @@ export function App() {
           <div className="flex items-center gap-2">
             <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-xs font-medium">
               <Zap className="w-3.5 h-3.5" />
-              <span>Groq 120B Connected</span>
+              <span>120B Neural Brain Connected</span>
             </div>
 
             {/* Light / Dark Mode Toggle */}
@@ -688,7 +688,7 @@ export function App() {
               </div>
               <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl rounded-tl-sm p-4 flex items-center gap-2.5 text-sm text-slate-600 dark:text-slate-400 shadow-sm">
                 <Loader2 className="w-4 h-4 animate-spin text-emerald-600 dark:text-emerald-400" />
-                <span>Synthesizing grounded explanation via Groq 120B...</span>
+                <span>Synthesizing grounded explanation via 120B Neural Brain...</span>
               </div>
             </div>
           )}
