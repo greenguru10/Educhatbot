@@ -35,6 +35,7 @@ This guide provides step-by-step instructions to deploy **LearnWise**:
 
 | Key | Value | Description |
 | :--- | :--- | :--- |
+| `PYTHON_VERSION` | `3.11.9` | Python runtime version |
 | `APP_ENV` | `production` | Production environment flag |
 | `API_PREFIX` | `/api/v1` | API base prefix |
 | `DATABASE_URL` | `postgresql://neondb_owner:password@ep-sample-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require` | NeonDB connection string |
