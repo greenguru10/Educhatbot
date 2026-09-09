@@ -52,23 +52,24 @@ class Settings(BaseSettings):
     # File uploads & limits
     MAX_UPLOAD_MB: int = 25
     MAX_QUERY_LENGTH: int = 1500
-    ALLOWED_ORIGINS: List[str] = ["*"]
+    ALLOWED_ORIGINS: str = "*"
 
-    @field_validator("ALLOWED_ORIGINS", mode="before")
-    @classmethod
-    def parse_allowed_origins(cls, v):
-        if isinstance(v, str):
-            v = v.strip()
-            if v.startswith("[") and v.endswith("]"):
-                try:
-                    import json
-                    return json.loads(v)
-                except Exception:
-                    pass
-            return [origin.strip() for origin in v.split(",") if origin.strip()]
-        elif isinstance(v, list):
-            return v
-        return ["*"]
+    @property
+    def allowed_origins_list(self) -> List[str]:
+        if not self.ALLOWED_ORIGINS:
+            return ["*"]
+        val = str(self.ALLOWED_ORIGINS).strip()
+        if val == "*":
+            return ["*"]
+        if val.startswith("[") and val.endswith("]"):
+            try:
+                import json
+                parsed = json.loads(val)
+                if isinstance(parsed, list):
+                    return parsed
+            except Exception:
+                pass
+        return [origin.strip() for origin in val.split(",") if origin.strip()]
 
     model_config = SettingsConfigDict(
         env_file=str(BASE_DIR / ".env"),
