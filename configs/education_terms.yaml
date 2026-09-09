@@ -1,0 +1,98 @@
+abbreviations:
+  dsa:
+    expansion: data structures and algorithms
+    subject: computer_science
+  dbms:
+    expansion: database management system
+    subject: computer_science
+  oops:
+    expansion: object oriented programming
+    subject: programming
+  oop:
+    expansion: object oriented programming
+    subject: programming
+  osi:
+    expansion: open systems interconnection
+    subject: networking
+  tcp:
+    expansion: transmission control protocol
+    subject: networking
+  udp:
+    expansion: user datagram protocol
+    subject: networking
+  sql:
+    expansion: structured query language
+    subject: computer_science
+  ml:
+    expansion: machine learning
+    subject: artificial_intelligence
+  ai:
+    expansion: artificial intelligence
+    subject: artificial_intelligence
+  api:
+    expansion: application programming interface
+    subject: programming
+  http:
+    expansion: hypertext transfer protocol
+    subject: networking
+  https:
+    expansion: hypertext transfer protocol secure
+    subject: networking
+  dns:
+    expansion: domain name system
+    subject: networking
+  cpu:
+    expansion: central processing unit
+    subject: computer_science
+  ram:
+    expansion: random access memory
+    subject: computer_science
+  aws:
+    expansion: amazon web services
+    subject: cloud_computing
+  ci_cd:
+    expansion: continuous integration and continuous deployment
+    subject: cloud_computing
+  owasp:
+    expansion: open web application security project
+    subject: cybersecurity_fundamentals
+  xss:
+    expansion: cross site scripting
+    subject: cybersecurity_fundamentals
+  csrf:
+    expansion: cross site request forgery
+    subject: cybersecurity_fundamentals
+
+synonyms:
+  recursion:
+    - recursive function
+    - self calling function
+    - recurrence relation
+  database_normalization:
+    - normal forms
+    - db normalization
+    - 1nf 2nf 3nf bcnf
+  binary_search:
+    - binary lookup
+    - divide and conquer search
+    - logarithmic search
+  derivative:
+    - differentiation
+    - rate of change
+    - slope of curve
+  integral:
+    - integration
+    - antiderivative
+    - area under curve
+  matrix:
+    - linear transformation
+    - 2d array
+    - vector space
+  osi_model:
+    - 7 layers
+    - network architecture
+    - open systems interconnection model
+  neural_network:
+    - deep learning
+    - artificial neural network
+    - multilayer perceptron

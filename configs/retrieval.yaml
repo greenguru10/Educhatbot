@@ -1,0 +1,26 @@
+retrieval:
+  candidate_k: 40
+  rerank_top_n: 30
+  final_evidence_k: 4
+  min_retrieval_score: 0.15
+  min_grounding_score: 0.50
+
+bm25:
+  k1: 1.2
+  b: 0.75
+  candidate_k: 40
+
+vector_search:
+  candidate_k: 40
+  similarity: cosine
+  normalize_embeddings: true
+  minimum_similarity: 0.25
+
+fusion:
+  rrf_k: 60
+  weights:
+    rrf: 0.45
+    rerank: 0.25
+    authority: 0.15
+    metadata_match: 0.10
+    recency: 0.05

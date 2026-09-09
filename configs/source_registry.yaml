@@ -1,0 +1,107 @@
+sources:
+  - id: "src_python_docs"
+    name: "Python Official Documentation"
+    base_url: "https://docs.python.org/3/"
+    authority_level: "A"
+    authority_score: 0.98
+    license_notes: "PSF License Version 2"
+    active: true
+
+  - id: "src_openstax_cs"
+    name: "OpenStax Computer Science & Math"
+    base_url: "https://openstax.org/"
+    authority_level: "A"
+    authority_score: 0.95
+    license_notes: "Creative Commons Attribution 4.0 International (CC BY 4.0)"
+    active: true
+
+  - id: "src_mit_ocw"
+    name: "MIT OpenCourseWare"
+    base_url: "https://ocw.mit.edu/"
+    authority_level: "A"
+    authority_score: 0.96
+    license_notes: "Creative Commons Attribution-NonCommercial-ShareAlike (CC BY-NC-SA 4.0)"
+    active: true
+
+  - id: "src_mdn_web"
+    name: "MDN Web Docs"
+    base_url: "https://developer.mozilla.org/"
+    authority_level: "A"
+    authority_score: 0.94
+    license_notes: "CC-BY-SA 2.5 or later"
+    active: true
+
+  - id: "src_owasp_foundation"
+    name: "OWASP Foundation"
+    base_url: "https://owasp.org/"
+    authority_level: "A"
+    authority_score: 0.95
+    license_notes: "Creative Commons Attribution-ShareAlike 4.0"
+    active: true
+
+  - id: "src_khan_academy"
+    name: "Khan Academy Educational Resources"
+    base_url: "https://www.khanacademy.org/"
+    authority_level: "B"
+    authority_score: 0.90
+    license_notes: "Educational Non-Commercial Terms"
+    active: true
+
+  - id: "src_nptel_swayam"
+    name: "NPTEL & SWAYAM India Portal"
+    base_url: "https://nptel.ac.in/"
+    authority_level: "A"
+    authority_score: 0.92
+    license_notes: "Ministry of Education Government of India Open Education"
+    active: true
+
+subjects:
+  - slug: "programming"
+    display_name: "Programming & Python"
+    description: "Core programming syntax, logic, algorithms, and idiomatic coding"
+    active: true
+
+  - slug: "computer_science"
+    display_name: "Computer Science & DSA"
+    description: "Data structures, algorithms, databases, and operating systems"
+    active: true
+
+  - slug: "artificial_intelligence"
+    display_name: "Artificial Intelligence & ML"
+    description: "Machine learning, neural networks, supervised learning, and AI concepts"
+    active: true
+
+  - slug: "mathematics"
+    display_name: "Mathematics & Statistics"
+    description: "Calculus, linear algebra, probability, and discrete mathematics"
+    active: true
+
+  - slug: "physics"
+    display_name: "Physics & Engineering"
+    description: "Mechanics, electromagnetism, thermodynamics, and scientific principles"
+    active: true
+
+  - slug: "cybersecurity_fundamentals"
+    display_name: "Cybersecurity Fundamentals"
+    description: "Network security, cryptography, OWASP top 10, and safe architecture"
+    active: true
+
+  - slug: "cloud_computing"
+    display_name: "Cloud Computing & DevOps"
+    description: "Cloud architecture, microservices, virtualization, containers, and CI/CD"
+    active: true
+
+  - slug: "english_communication"
+    display_name: "English & Technical Writing"
+    description: "Professional writing, technical documentation, grammar, and presentations"
+    active: true
+
+  - slug: "study_skills"
+    display_name: "Study Skills & Revision"
+    description: "Spaced repetition, active recall, problem solving strategies, and exam prep"
+    active: true
+
+  - slug: "career_learning"
+    display_name: "Career & Tech Pathways"
+    description: "Software engineering career prep, technical interviews, and learning roadmaps"
+    active: true
