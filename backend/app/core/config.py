@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
-from typing import List
+from typing import List, Union
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Base directory for the repository
@@ -51,13 +52,23 @@ class Settings(BaseSettings):
     # File uploads & limits
     MAX_UPLOAD_MB: int = 25
     MAX_QUERY_LENGTH: int = 1500
-    ALLOWED_ORIGINS: List[str] = [
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:3000",
-        "https://learnwise.vercel.app",
-        "*"
-    ]
+    ALLOWED_ORIGINS: List[str] = ["*"]
+
+    @field_validator("ALLOWED_ORIGINS", mode="before")
+    @classmethod
+    def parse_allowed_origins(cls, v):
+        if isinstance(v, str):
+            v = v.strip()
+            if v.startswith("[") and v.endswith("]"):
+                try:
+                    import json
+                    return json.loads(v)
+                except Exception:
+                    pass
+            return [origin.strip() for origin in v.split(",") if origin.strip()]
+        elif isinstance(v, list):
+            return v
+        return ["*"]
 
     model_config = SettingsConfigDict(
         env_file=str(BASE_DIR / ".env"),
