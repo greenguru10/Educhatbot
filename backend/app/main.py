@@ -131,6 +131,17 @@ def create_app() -> FastAPI:
 
     app.include_router(api_router, prefix=settings.API_PREFIX)
 
+    @app.get("/")
+    @app.head("/")
+    def root_health():
+        return {
+            "status": "ok",
+            "app": settings.APP_NAME,
+            "version": settings.VERSION,
+            "docs": "/docs",
+            "api_prefix": settings.API_PREFIX
+        }
+
     return app
 
 app = create_app()
