@@ -41,15 +41,15 @@ export const Logo: React.FC<LogoProps> = ({ size = 'md', showSubtitle = true }) 
       </div>
       <div className="flex flex-col">
         <div className="flex items-center gap-1.5">
-          <span className={`font-bold tracking-tight text-white ${textSizes[size]}`}>
-            Learn<span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Wise</span>
+          <span className={`font-bold tracking-tight text-slate-900 dark:text-white ${textSizes[size]}`}>
+            Learn<span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-cyan-500 dark:from-emerald-400 dark:to-cyan-400">Wise</span>
           </span>
-          <span className="text-[10px] uppercase tracking-wider font-semibold px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span className="text-[10px] uppercase tracking-wider font-semibold px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
             PRO
           </span>
         </div>
         {showSubtitle && size !== 'sm' && (
-          <span className="text-[10px] text-slate-400 font-medium tracking-wide">
+          <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium tracking-wide">
             Source-Grounded AI Tutor
           </span>
         )}

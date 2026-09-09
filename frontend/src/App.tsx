@@ -13,16 +13,14 @@ import {
   VolumeX, 
   User, 
   Zap, 
-  ArrowLeft, 
   Home, 
   MessageSquare, 
   Sparkles,
-  Search,
-  ExternalLink,
-  Bot
+  Sun,
+  Moon
 } from 'lucide-react';
 import { apiClient } from './api/client';
-import { ChatMessage, Citation, SessionItem, SourceRegistryItem } from './types';
+import { ChatMessage, Citation, SessionItem } from './types';
 import { CodeBlock } from './components/chat/CodeBlock';
 import { SourceDrawer } from './components/chat/SourceDrawer';
 import { NotesDrawer } from './components/learning/NotesDrawer';
@@ -34,6 +32,15 @@ import { getCurrentUser, UserProfile } from './utils/user';
 export function App() {
   // Navigation: 'landing' or 'chat'
   const [currentView, setCurrentView] = useState<'landing' | 'chat'>('landing');
+
+  // Theme: 'dark' or 'light'
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    try {
+      const saved = localStorage.getItem('learnwise_theme');
+      if (saved === 'light' || saved === 'dark') return saved;
+    } catch {}
+    return 'dark';
+  });
 
   // Active User Profile
   const [currentUser, setCurrentUser] = useState<UserProfile>(getCurrentUser());
@@ -80,6 +87,21 @@ export function App() {
     { title: "TCP vs UDP Protocols", desc: "3-way handshake, packet reliability & latency tradeoffs", query: "Compare TCP vs UDP protocols and explain the 3-way handshake" },
     { title: "DBMS Normalization (1NF - 3NF)", desc: "Relational dependencies, anomalies & ACID transactions", query: "Explain 1NF, 2NF, 3NF database normalization with practical table examples" },
   ];
+
+  // Sync theme with HTML class
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+    localStorage.setItem('learnwise_theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
+  };
 
   // Load Sessions whenever user changes
   useEffect(() => {
@@ -324,14 +346,14 @@ export function App() {
                 // Headings
                 if (p.startsWith('### ')) {
                   return (
-                    <h3 key={pIdx} className="text-base font-bold text-white mt-3 mb-1">
+                    <h3 key={pIdx} className="text-base font-bold text-slate-900 dark:text-white mt-3 mb-1">
                       {p.replace('### ', '')}
                     </h3>
                   );
                 }
                 if (p.startsWith('#### ')) {
                   return (
-                    <h4 key={pIdx} className="text-sm font-semibold text-emerald-400 mt-2 mb-1">
+                    <h4 key={pIdx} className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 mt-2 mb-1">
                       {p.replace('#### ', '')}
                     </h4>
                   );
@@ -341,7 +363,7 @@ export function App() {
                 const inlineParts = p.split(/(\[S\d+\])/g);
 
                 return (
-                  <p key={pIdx} className="text-sm text-slate-200 leading-relaxed">
+                  <p key={pIdx} className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed">
                     {inlineParts.map((sub, sIdx) => {
                       const citationMatch = sub.match(/\[S(\d+)\]/);
                       if (citationMatch && citations) {
@@ -352,7 +374,7 @@ export function App() {
                             <button
                               key={sIdx}
                               onClick={() => setSelectedCitation(foundCit)}
-                              className="inline-flex items-center gap-1 mx-1 px-1.5 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25 transition-all cursor-pointer select-none"
+                              className="inline-flex items-center gap-1 mx-1 px-1.5 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25 transition-all cursor-pointer select-none"
                               title={`View source: ${foundCit.title}`}
                             >
                               <span>[{citKey}]</span>
@@ -374,20 +396,20 @@ export function App() {
 
   // If in Landing Page view, show Landing Page
   if (currentView === 'landing') {
-    return <LandingPage onStartChat={handleLaunchChat} />;
+    return <LandingPage onStartChat={handleLaunchChat} theme={theme} onToggleTheme={toggleTheme} />;
   }
 
   return (
-    <div className="flex h-screen bg-slate-950 text-slate-100 antialiased overflow-hidden selection:bg-emerald-500 selection:text-black font-sans">
+    <div className="flex h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased overflow-hidden selection:bg-emerald-500 selection:text-black font-sans transition-colors duration-200">
       {/* LEFT SIDEBAR */}
       <aside
-        className={`fixed inset-y-0 left-0 z-30 flex flex-col bg-slate-900 border-r border-slate-800 transition-all duration-300 ease-in-out md:static ${
+        className={`fixed inset-y-0 left-0 z-30 flex flex-col bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transition-all duration-300 ease-in-out md:static shadow-lg md:shadow-none ${
           isSidebarOpen ? 'w-64 translate-x-0' : 'w-0 -translate-x-full md:w-0'
         }`}
       >
         <div className="flex flex-col h-full overflow-hidden">
           {/* Logo & Navigation */}
-          <div className="p-4 border-b border-slate-800/80 flex items-center justify-between">
+          <div className="p-4 border-b border-slate-200 dark:border-slate-800/80 flex items-center justify-between">
             <button 
               onClick={() => setCurrentView('landing')}
               className="hover:opacity-80 transition-opacity"
@@ -397,7 +419,7 @@ export function App() {
             </button>
             <button
               onClick={() => setCurrentView('landing')}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               title="Landing Page"
             >
               <Home className="w-4 h-4" />
@@ -417,11 +439,11 @@ export function App() {
 
           {/* User Chat Sessions List */}
           <div className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
-            <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 px-2 py-1">
+            <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-2 py-1">
               Your Sessions
             </div>
             {sessions.length === 0 ? (
-              <div className="text-xs text-slate-500 px-3 py-4 text-center">
+              <div className="text-xs text-slate-400 dark:text-slate-500 px-3 py-4 text-center">
                 No past chats yet for {currentUser.name}. Start a conversation!
               </div>
             ) : (
@@ -431,17 +453,17 @@ export function App() {
                   onClick={() => handleSelectSession(s.id)}
                   className={`group relative flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium cursor-pointer transition-all ${
                     sessionId === s.id
-                      ? 'bg-emerald-950/40 text-emerald-300 border border-emerald-500/30'
-                      : 'text-slate-400 hover:bg-slate-800/70 hover:text-slate-200'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 font-semibold'
+                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-slate-200'
                   }`}
                 >
                   <div className="flex items-center gap-2.5 truncate pr-6">
-                    <MessageSquare className={`w-3.5 h-3.5 shrink-0 ${sessionId === s.id ? 'text-emerald-400' : 'text-slate-500'}`} />
+                    <MessageSquare className={`w-3.5 h-3.5 shrink-0 ${sessionId === s.id ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}`} />
                     <span className="truncate">{s.title || 'Academic Session'}</span>
                   </div>
                   <button
                     onClick={(e) => handleDeleteSession(e, s.id)}
-                    className="opacity-0 group-hover:opacity-100 p-1 text-slate-500 hover:text-red-400 rounded transition-all"
+                    className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-red-500 rounded transition-all"
                     title="Delete session"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -452,16 +474,16 @@ export function App() {
           </div>
 
           {/* Sidebar Footer / User Profile & Notes */}
-          <div className="p-3 border-t border-slate-800/80 bg-slate-950/40 space-y-2">
+          <div className="p-3 border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/70 dark:bg-slate-950/40 space-y-2">
             <button
               onClick={() => setIsNotesOpen(true)}
-              className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-slate-800/40 hover:bg-slate-800 text-slate-300 text-xs transition-colors"
+              className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-white dark:bg-slate-800/40 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 text-xs transition-colors shadow-sm"
             >
               <span className="flex items-center gap-2">
-                <Bookmark className="w-3.5 h-3.5 text-cyan-400" />
+                <Bookmark className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
                 <span>Saved Notes</span>
               </span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 font-semibold">
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-700 dark:text-cyan-400 font-semibold">
                 {savedNotes.length}
               </span>
             </button>
@@ -469,20 +491,20 @@ export function App() {
             {/* Active User Switcher */}
             <button
               onClick={() => setIsUserModalOpen(true)}
-              className="w-full flex items-center justify-between p-2 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900 hover:bg-slate-800/80 transition-all text-left"
+              className="w-full flex items-center justify-between p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-all text-left shadow-sm"
             >
               <div className="flex items-center gap-2.5 truncate">
                 <img
                   src={currentUser.avatar}
                   alt={currentUser.name}
-                  className="w-7 h-7 rounded-full object-cover border border-slate-700"
+                  className="w-7 h-7 rounded-full object-cover border border-slate-200 dark:border-slate-700"
                 />
                 <div className="truncate">
-                  <div className="text-xs font-semibold text-slate-200 truncate">{currentUser.name}</div>
+                  <div className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">{currentUser.name}</div>
                   <div className="text-[10px] text-slate-500 truncate">{currentUser.role}</div>
                 </div>
               </div>
-              <span className="text-[10px] text-emerald-400 font-mono">Switch</span>
+              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">Switch</span>
             </button>
           </div>
         </div>
@@ -491,11 +513,11 @@ export function App() {
       {/* MAIN CHAT WORKSPACE */}
       <main className="flex-1 flex flex-col h-full overflow-hidden relative">
         {/* Top Workspace Header */}
-        <header className="h-14 border-b border-slate-800/80 bg-slate-900/50 backdrop-blur-md px-4 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-3">
+        <header className="h-14 border-b border-slate-200 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/50 backdrop-blur-md px-4 flex items-center justify-between shrink-0 transition-colors">
+          <div className="flex items-center gap-2">
             <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               title={isSidebarOpen ? "Collapse sidebar" : "Open sidebar"}
             >
               {isSidebarOpen ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeft className="w-4 h-4" />}
@@ -503,22 +525,31 @@ export function App() {
 
             <button
               onClick={() => setCurrentView('landing')}
-              className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-slate-800 transition-colors"
+              className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             >
               <Home className="w-3.5 h-3.5" />
-              <span>Landing Page</span>
+              <span className="hidden sm:inline">Landing Page</span>
             </button>
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
+            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-xs font-medium">
               <Zap className="w-3.5 h-3.5" />
               <span>Groq 120B Connected</span>
             </div>
 
+            {/* Light / Dark Mode Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+              title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
+            >
+              {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-indigo-600" />}
+            </button>
+
             <button
               onClick={() => setIsNotesOpen(true)}
-              className="p-2 text-slate-400 hover:text-cyan-400 hover:bg-slate-800 rounded-lg transition-colors"
+              className="p-2 text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
               title="Open Saved Notes"
             >
               <Bookmark className="w-4 h-4" />
@@ -533,7 +564,7 @@ export function App() {
             <div className="h-full flex flex-col items-center justify-center text-center py-12 px-4 max-w-2xl mx-auto space-y-8 animate-fade-in">
               <div className="space-y-3">
                 <Logo size="lg" />
-                <p className="text-sm text-slate-400 max-w-md mx-auto">
+                <p className="text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto">
                   Ask any computer science, programming, database, or algorithmic question. Responses are grounded in verified academic materials.
                 </p>
               </div>
@@ -544,12 +575,12 @@ export function App() {
                   <button
                     key={idx}
                     onClick={() => handleSendMessage(card.query)}
-                    className="p-4 rounded-xl bg-slate-900/80 hover:bg-slate-900 border border-slate-800 hover:border-emerald-500/40 text-left transition-all group"
+                    className="p-4 rounded-xl bg-white dark:bg-slate-900/80 hover:bg-slate-50 dark:hover:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/40 text-left transition-all shadow-sm group"
                   >
-                    <div className="text-xs font-semibold text-slate-200 group-hover:text-emerald-400 transition-colors">
+                    <div className="text-xs font-semibold text-slate-800 dark:text-slate-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                       {card.title}
                     </div>
-                    <div className="text-[11px] text-slate-400 mt-1 line-clamp-2">
+                    <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">
                       {card.desc}
                     </div>
                   </button>
@@ -575,7 +606,7 @@ export function App() {
                     className={`relative group max-w-[85%] rounded-2xl p-4 text-sm ${
                       isUser
                         ? 'bg-emerald-600 text-white rounded-tr-sm shadow-md'
-                        : 'bg-slate-900/90 border border-slate-800/90 text-slate-200 rounded-tl-sm shadow-lg'
+                        : 'bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/90 text-slate-800 dark:text-slate-200 rounded-tl-sm shadow-sm dark:shadow-lg'
                     }`}
                   >
                     {/* Content */}
@@ -587,17 +618,17 @@ export function App() {
 
                         {/* Discrete Citation Badges if present */}
                         {msg.sources && msg.sources.length > 0 && (
-                          <div className="pt-2 border-t border-slate-800/80 flex flex-wrap items-center gap-1.5">
-                            <span className="text-[11px] font-semibold text-slate-400 mr-1">
+                          <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 flex flex-wrap items-center gap-1.5">
+                            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mr-1">
                               Sources:
                             </span>
                             {msg.sources.map((s) => (
                               <button
                                 key={s.citation_key}
                                 onClick={() => setSelectedCitation(s)}
-                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] bg-slate-800/90 hover:bg-emerald-950/40 text-slate-300 hover:text-emerald-300 border border-slate-700 hover:border-emerald-500/40 transition-all cursor-pointer"
+                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] bg-slate-100 dark:bg-slate-800/90 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-slate-700 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-300 border border-slate-200 dark:border-slate-700 hover:border-emerald-500/40 transition-all cursor-pointer"
                               >
-                                <span className="font-semibold text-emerald-400">[{s.citation_key}]</span>
+                                <span className="font-semibold text-emerald-600 dark:text-emerald-400">[{s.citation_key}]</span>
                                 <span className="truncate max-w-[120px]">{s.title}</span>
                               </button>
                             ))}
@@ -608,18 +639,18 @@ export function App() {
                         <div className="pt-2 flex items-center justify-end gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
                           <button
                             onClick={() => handleCopyText(msg.id, msg.content)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                             title="Copy response"
                           >
-                            {copiedId === msg.id ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                            {copiedId === msg.id ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                           </button>
 
                           <button
                             onClick={() => handleToggleSpeech(msg.id, msg.content)}
                             className={`p-1.5 rounded-lg transition-colors ${
                               speakingId === msg.id
-                                ? 'text-emerald-400 bg-emerald-500/10'
-                                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                                ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-500/10'
+                                : 'text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
                             }`}
                             title={speakingId === msg.id ? "Stop Read-Aloud" : "Read Aloud"}
                           >
@@ -628,7 +659,7 @@ export function App() {
 
                           <button
                             onClick={() => handleSaveToNotes(msg.content.slice(0, 40) + '...', msg.content, msg.sources?.map(s => `${s.title} [${s.citation_key}]`))}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-cyan-400 hover:bg-slate-800 transition-colors"
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                             title="Save to Study Notes"
                           >
                             <Bookmark className="w-3.5 h-3.5" />
@@ -642,7 +673,7 @@ export function App() {
                     <img
                       src={currentUser.avatar}
                       alt={currentUser.name}
-                      className="w-8 h-8 rounded-full object-cover border border-slate-700 shrink-0 mt-1"
+                      className="w-8 h-8 rounded-full object-cover border border-slate-200 dark:border-slate-700 shrink-0 mt-1 shadow-sm"
                     />
                   )}
                 </div>
@@ -655,8 +686,8 @@ export function App() {
               <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-cyan-400 flex items-center justify-center text-slate-950 font-bold text-xs shrink-0">
                 LW
               </div>
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl rounded-tl-sm p-4 flex items-center gap-2.5 text-sm text-slate-400">
-                <Loader2 className="w-4 h-4 animate-spin text-emerald-400" />
+              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl rounded-tl-sm p-4 flex items-center gap-2.5 text-sm text-slate-600 dark:text-slate-400 shadow-sm">
+                <Loader2 className="w-4 h-4 animate-spin text-emerald-600 dark:text-emerald-400" />
                 <span>Synthesizing grounded explanation via Groq 120B...</span>
               </div>
             </div>
@@ -666,9 +697,9 @@ export function App() {
         </div>
 
         {/* Bottom Message Composer */}
-        <div className="p-4 bg-gradient-to-t from-slate-950 via-slate-950 to-transparent shrink-0">
+        <div className="p-4 bg-gradient-to-t from-slate-50 dark:from-slate-950 via-slate-50/80 dark:via-slate-950/80 to-transparent shrink-0">
           <div className="max-w-4xl mx-auto">
-            <div className="relative rounded-2xl bg-slate-900 border border-slate-800 focus-within:border-emerald-500/50 shadow-xl transition-all">
+            <div className="relative rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 focus-within:border-emerald-500 shadow-lg transition-all">
               <textarea
                 ref={textareaRef}
                 value={inputQuery}
@@ -676,7 +707,7 @@ export function App() {
                 onKeyDown={handleKeyDown}
                 placeholder="Ask an academic or coding question (e.g. 'Explain Dijkstra algorithm with Python code')..."
                 rows={2}
-                className="w-full bg-transparent text-sm text-white placeholder-slate-500 p-3.5 pr-14 resize-none focus:outline-none max-h-36"
+                className="w-full bg-transparent text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 p-3.5 pr-14 resize-none focus:outline-none max-h-36"
               />
 
               <div className="absolute right-2.5 bottom-2.5 flex items-center gap-1.5">
@@ -690,8 +721,8 @@ export function App() {
               </div>
             </div>
 
-            <div className="mt-2 flex items-center justify-between text-[11px] text-slate-500 px-1">
-              <span>Press <kbd className="px-1 py-0.5 rounded bg-slate-800 border border-slate-700 font-mono">Enter</kbd> to send, <kbd className="px-1 py-0.5 rounded bg-slate-800 border border-slate-700 font-mono">Shift + Enter</kbd> for new line</span>
+            <div className="mt-2 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 px-1">
+              <span>Press <kbd className="px-1 py-0.5 rounded bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 font-mono text-slate-700 dark:text-slate-300">Enter</kbd> to send, <kbd className="px-1 py-0.5 rounded bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 font-mono text-slate-700 dark:text-slate-300">Shift + Enter</kbd> for new line</span>
               <span>LearnWise AI Tutor</span>
             </div>
           </div>

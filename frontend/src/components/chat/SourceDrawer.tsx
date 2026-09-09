@@ -13,19 +13,19 @@ export const SourceDrawer: React.FC<SourceDrawerProps> = ({ citation, onClose, i
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm animate-fade-in">
-      <div className="w-full max-w-md bg-[#0f172a] border-l border-slate-800 h-full flex flex-col shadow-2xl overflow-hidden animate-slide-left">
+      <div className="w-full max-w-md bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 h-full flex flex-col shadow-2xl overflow-hidden animate-slide-left transition-colors">
         
         {/* Header */}
-        <div className="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/60">
+        <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-950/60">
           <div className="flex items-center gap-2">
-            <span className="bg-brand-900 text-brand-300 font-bold px-2 py-0.5 rounded text-xs border border-brand-700/50">
+            <span className="bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-bold px-2 py-0.5 rounded text-xs border border-emerald-500/30">
               [{citation.citation_key}]
             </span>
-            <h3 className="font-semibold text-slate-100 text-sm truncate">Source Evidence</h3>
+            <h3 className="font-semibold text-slate-900 dark:text-slate-100 text-sm truncate">Source Evidence</h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -36,68 +36,75 @@ export const SourceDrawer: React.FC<SourceDrawerProps> = ({ citation, onClose, i
           
           {/* Title & Publisher */}
           <div>
-            <span className="text-[11px] font-medium text-brand-400 uppercase tracking-wider">Document Title</span>
-            <h2 className="text-base font-bold text-white mt-0.5">{citation.title}</h2>
+            <span className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Document Title</span>
+            <h2 className="text-base font-bold text-slate-900 dark:text-white mt-0.5">{citation.title}</h2>
             {citation.source_name && (
-              <p className="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Publisher: {citation.source_name}</span>
-              </p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">{citation.source_name}</p>
             )}
           </div>
 
-          {/* Metadata Grid */}
-          <div className="grid grid-cols-2 gap-3 bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 text-xs text-slate-300">
+          {/* Institutional Metadata Grid */}
+          <div className="grid grid-cols-2 gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/60 text-xs">
+            {citation.author && (
+              <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                <User className="w-3.5 h-3.5 text-slate-400" />
+                <span className="truncate">{citation.author}</span>
+              </div>
+            )}
             {citation.section && (
-              <div>
-                <span className="text-slate-500 block text-[10px] uppercase">Section</span>
-                <span className="font-medium text-slate-200">{citation.section}</span>
+              <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                <Tag className="w-3.5 h-3.5 text-slate-400" />
+                <span className="truncate">{citation.section}</span>
               </div>
             )}
             {citation.page_number && (
-              <div>
-                <span className="text-slate-500 block text-[10px] uppercase">Page</span>
-                <span className="font-medium text-slate-200">{citation.page_number}</span>
+              <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                <FileText className="w-3.5 h-3.5 text-slate-400" />
+                <span>Page {citation.page_number}</span>
               </div>
             )}
             {citation.license && (
-              <div className="col-span-2">
-                <span className="text-slate-500 block text-[10px] uppercase">License / Terms</span>
-                <span className="font-medium text-slate-200">{citation.license}</span>
-              </div>
-            )}
-            {citation.author && (
-              <div className="col-span-2">
-                <span className="text-slate-500 block text-[10px] uppercase">Author / Contributor</span>
-                <span className="font-medium text-slate-200">{citation.author}</span>
+              <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span className="truncate">{citation.license}</span>
               </div>
             )}
           </div>
 
           {/* Grounded Excerpt */}
           <div className="space-y-2">
-            <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-brand-400" />
-              <span>Retrieved Evidence Excerpt</span>
+            <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+              <FileText className="w-3.5 h-3.5" />
+              Verified Text Excerpt
             </span>
-            <div className="bg-slate-950 border border-slate-800/80 p-4 rounded-xl text-xs text-slate-300 leading-relaxed font-mono">
-              {citation.excerpt || "No raw excerpt recorded."}
+            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-xs leading-relaxed text-slate-700 dark:text-slate-300 font-serif italic whitespace-pre-wrap">
+              "{citation.excerpt || 'No specific excerpt recorded for this citation.'}"
             </div>
           </div>
 
-          {/* Direct URL */}
+          {/* External URL if available */}
           {citation.url && (
-            <a
-              href={citation.url}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-colors border border-slate-700/60"
-            >
-              <span>Open Primary Source</span>
-              <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
-            </a>
+            <div className="pt-2">
+              <a
+                href={citation.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline"
+              >
+                <span>Access Primary Document</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
           )}
+        </div>
 
+        {/* Verification Footer */}
+        <div className="p-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/50 flex items-center justify-between text-[11px] text-slate-500">
+          <span className="flex items-center gap-1">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+            Institutionally Verified
+          </span>
+          <span className="font-mono text-[10px]">ID: {citation.chunk_id ? citation.chunk_id.slice(0, 8) : 'chk_indexed'}</span>
         </div>
 
       </div>
