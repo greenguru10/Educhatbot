@@ -2,8 +2,14 @@ import { ChatMessage, Citation, Flashcard, QuizQuestion, SessionItem, SourceRegi
 
 const getApiBase = (): string => {
   try {
-    const metaEnv = (import.meta as any)?.env?.VITE_API_BASE_URL;
-    if (metaEnv) return metaEnv.replace(/\/+$/, '');
+    let url = (import.meta as any)?.env?.VITE_API_BASE_URL;
+    if (url && typeof url === 'string') {
+      url = url.trim().replace(/\/+$/, '');
+      if (!url.endsWith('/api/v1') && !url.includes('/api/v1')) {
+        url = `${url}/api/v1`;
+      }
+      return url;
+    }
   } catch {}
   return '/api/v1';
 };
@@ -12,8 +18,13 @@ const API_BASE = getApiBase();
 
 export const apiClient = {
   async health() {
-    const res = await fetch(`${API_BASE}/health`);
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE}/health`);
+      if (!res.ok) return { status: 'offline' };
+      return res.json();
+    } catch {
+      return { status: 'offline' };
+    }
   },
 
   async sendChat(params: {
@@ -24,20 +35,40 @@ export const apiClient = {
     learner_level?: string;
     response_style?: string;
   }) {
-    const res = await fetch(`${API_BASE}/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(params),
-    });
-    if (!res.ok) throw new Error(`Chat error: ${res.statusText}`);
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(params),
+      });
+      if (!res.ok) {
+        let errorDetail = '';
+        try {
+          const errData = await res.json();
+          errorDetail = errData.detail || errData.message || JSON.stringify(errData);
+        } catch {
+          errorDetail = await res.text();
+        }
+        throw new Error(`Server returned HTTP ${res.status} (${res.statusText || 'Error'}): ${errorDetail || 'Please check backend logs.'}`);
+      }
+      return res.json();
+    } catch (err: any) {
+      if (err.message && err.message.startsWith('Server returned')) {
+        throw err;
+      }
+      throw new Error(`Cannot connect to backend (${API_BASE}). If Render is cold-starting, please wait ~30 seconds and retry.`);
+    }
   },
 
   async getSessions(user_id?: string): Promise<SessionItem[]> {
-    const url = user_id ? `${API_BASE}/sessions?user_id=${encodeURIComponent(user_id)}` : `${API_BASE}/sessions`;
-    const res = await fetch(url);
-    if (!res.ok) return [];
-    return res.json();
+    try {
+      const url = user_id ? `${API_BASE}/sessions?user_id=${encodeURIComponent(user_id)}` : `${API_BASE}/sessions`;
+      const res = await fetch(url);
+      if (!res.ok) return [];
+      return res.json();
+    } catch {
+      return [];
+    }
   },
 
   async getSession(id: string) {
@@ -77,21 +108,33 @@ export const apiClient = {
   },
 
   async getSources(): Promise<SourceRegistryItem[]> {
-    const res = await fetch(`${API_BASE}/sources`);
-    if (!res.ok) return [];
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE}/sources`);
+      if (!res.ok) return [];
+      return res.json();
+    } catch {
+      return [];
+    }
   },
 
   async getSubjects(): Promise<SubjectItem[]> {
-    const res = await fetch(`${API_BASE}/subjects`);
-    if (!res.ok) return [];
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE}/subjects`);
+      if (!res.ok) return [];
+      return res.json();
+    } catch {
+      return [];
+    }
   },
 
   async getDocuments(): Promise<DocumentItem[]> {
-    const res = await fetch(`${API_BASE}/documents`);
-    if (!res.ok) return [];
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE}/documents`);
+      if (!res.ok) return [];
+      return res.json();
+    } catch {
+      return [];
+    }
   },
 
   async getDocumentDetail(id: string) {
@@ -127,11 +170,15 @@ export const apiClient = {
   },
 
   async submitFeedback(answer_id: string, rating: number, comment?: string) {
-    const res = await fetch(`${API_BASE}/feedback`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ answer_id, rating, comment }),
-    });
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE}/feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ answer_id, rating, comment }),
+      });
+      return res.json();
+    } catch {
+      return { status: 'skipped' };
+    }
   }
 };
