@@ -1,6 +1,14 @@
 import { ChatMessage, Citation, Flashcard, QuizQuestion, SessionItem, SourceRegistryItem, SubjectItem, DocumentItem } from '../types';
 
-const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api/v1').replace(/\/+$/, '');
+const getApiBase = (): string => {
+  try {
+    const metaEnv = (import.meta as any)?.env?.VITE_API_BASE_URL;
+    if (metaEnv) return metaEnv.replace(/\/+$/, '');
+  } catch {}
+  return '/api/v1';
+};
+
+const API_BASE = getApiBase();
 
 export const apiClient = {
   async health() {
